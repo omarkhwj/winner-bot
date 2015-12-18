@@ -9,7 +9,7 @@ var Bot = new Twit({
 
 var contestStream = Bot.stream(
     'statuses/filter',
-    {track: 'rt to win,chance to win,retweet to win'});
+    {track: 'rt to win,retweet to win'});
 
 findContests();
 
