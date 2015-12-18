@@ -30,26 +30,29 @@ function enterContest(tweet) {
 
     //Very crude idea of what I want to be doing when I find a tweet with
     //a contest. Retweet, like, and follow.
-    Bot.post('statuses/retweet/:id',
+
+    if (!tweet.retweeted_status){ 
+	Bot.post('statuses/retweet/:id',
 	     {id: tweet.id_str},
 	     function(err, data, response) {
 		 if (err) throw err;
 		 console.log(data);
 	     });
 
-    Bot.post('favorites/create',
+	Bot.post('favorites/create',
 	     {id: tweet.id_str},
-	     function(err, data, response) {
-		 if (err) throw err;
-		 console.log(data);
-	     });
-
-    Bot.post('friendships/create',
+		 function(err, data, response) {
+		     if (err) throw err;
+		     console.log(data);
+		 });
+	
+	Bot.post('friendships/create',
 	     {id: tweet.user.id_str},
 	     function(err, data, response) {
 		 if (err) throw err;
 		 console.log(data);
 	     });
+    }
 };
 
 
