@@ -9,7 +9,7 @@ var Bot = new Twit({
 
 var contestStream = Bot.stream(
     'statuses/filter',
-    {track: 'rt to win,retweet to win'});
+    {track: 'rt #giveaway'});
 
 findContests();
 
@@ -31,7 +31,16 @@ function enterContest(tweet) {
     //Very crude idea of what I want to be doing when I find a tweet with
     //a contest. Retweet, like, and follow.
 
-    if (!tweet.retweeted_status){ 
+    var RTchain = false;
+    var idxRtH;
+    var idxColon;
+
+    if(((idxRtH = tweet.text.indexOf('RT ')) + 1)
+       && (idxColon = tweet.text.substr(idxRtH).indexOf(':'))) {
+	if (tweet.text.substring(idxRtH + 3, idxColon + idxRtH).search(/^\w+$/) +1)
+	       RTchain = true;
+    }
+    if (!tweet.retweeted_status && !tweet.quoted_status && !RTchain){ 
 	Bot.post('statuses/retweet/:id',
 	     {id: tweet.id_str},
 	     function(err, data, response) {
